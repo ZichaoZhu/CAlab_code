@@ -15,7 +15,7 @@ module HazardDetectionUnit(
     reg[1:0] hazard_optype_EXE, hazard_optype_MEM;
     always @(posedge clk) begin
         hazard_optype_MEM <= hazard_optype_EXE;
-        hazard_optype_MEM <= hazard_optype_ID & {2{~reg_DE_flush}};
+        hazard_optype_EXE <= hazard_optype_ID & {2{~reg_DE_flush}};
     end
 
     //
@@ -49,6 +49,8 @@ module HazardDetectionUnit(
 
     //
     assign reg_FD_flush = Branch_ID;
+
+    //
     assign PC_EN_IF = ~(A_stall | B_stall);
     assign reg_FD_EN = 1'b1;
     assign reg_DE_EN = 1'b1;

@@ -62,11 +62,11 @@ module CtrlUnit(
     wire BLTU = Bop & funct3_6;                           //to fill sth. in 
     wire BGEU = Bop & funct3_7;                           //to fill sth. in 
 
-    wire LB =  Iop & funct3_0;                            //to fill sth. in 
-    wire LH =  Iop & funct3_1;                            //to fill sth. in 
-    wire LW =  Iop & funct3_2;                            //to fill sth. in 
-    wire LBU = Iop & funct3_4;                            //to fill sth. in 
-    wire LHU = Iop & funct3_5;                            //to fill sth. in 
+    wire LB =  Lop & funct3_0;                            //to fill sth. in 
+    wire LH =  Lop & funct3_1;                            //to fill sth. in 
+    wire LW =  Lop & funct3_2;                            //to fill sth. in 
+    wire LBU = Lop & funct3_4;                            //to fill sth. in 
+    wire LHU = Lop & funct3_5;                            //to fill sth. in 
 
     wire SB = Sop & funct3_0;                             //to fill sth. in 
     wire SH = Sop & funct3_1;                             //to fill sth. in 
@@ -99,12 +99,19 @@ module CtrlUnit(
                     {3{LUI | AUIPC}}              & Imm_type_U ;
 
 
-    assign cmp_ctrl = {3'b001} & {3{BEQ}}  |
-                      {3'b010} & {3{BNE}}  |            
-                      {3'b011} & {3{BLT}}  |            
-                      {3'b100} & {3{BLTU}} |            
-                      {3'b101} & {3{BGE}}  |            
-                      {3'b110} & {3{BGEU}} ;         //to fill sth. in 
+    // assign cmp_ctrl = {3'b001} & {3{BEQ}}  |
+    //                   {3'b010} & {3{BNE}}  |            
+    //                   {3'b011} & {3{BLT}}  |            
+    //                   {3'b100} & {3{BLTU}} |            
+    //                   {3'b101} & {3{BGE}}  |            
+    //                   {3'b110} & {3{BGEU}} ;         //to fill sth. in 
+
+    assign cmp_ctrl = funct3_0 & {3{BEQ}}  |
+                      funct3_1 & {3{BNE}}  |            
+                      funct3_4 & {3{BLT}}  |            
+                      funct3_5 & {3{BLTU}} |            
+                      funct3_6 & {3{BGE}}  |            
+                      funct3_7 & {3{BGEU}} ;         //to fill sth. in 
 
     assign ALUSrc_A = JAL | JALR | AUIPC;                         //to fill sth. in 
 
@@ -151,7 +158,7 @@ module CtrlUnit(
     parameter hazard_optype_LOAD = 2'b10;
     parameter hazard_optype_STORE = 2'b11;
     
-    assign hazard_optype = hazard_optype_ALU & {2{R_valid | I_valid | JAL | LUI | AUIPC}} |
+    assign hazard_optype = hazard_optype_ALU & {2{R_valid | I_valid | JAL | JALR | LUI | AUIPC}} |
                            hazard_optype_LOAD & {2{L_valid}} |
                            hazard_optype_STORE & {2{S_valid}};           //to fill sth. in 
 
